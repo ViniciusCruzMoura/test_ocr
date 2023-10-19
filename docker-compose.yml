@@ -1,0 +1,26 @@
+version: '3.3'
+services:
+  web:
+    image: ocrteste:latest
+    build: .
+    command: >
+      sh -c "nvidia-smi & python main.py"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+  # web2:
+  #   image: ocrteste:latest
+  #   build: .
+  #   command: >
+  #     sh -c "nvidia-smi & python main.py"
+  #   deploy:
+  #     resources:
+  #       reservations:
+  #         devices:
+  #           - driver: nvidia
+  #             count: 1
+  #             capabilities: [gpu]

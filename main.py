@@ -23,3 +23,26 @@ for resultado in resultados:
 resultados = reader.readtext('https://media.smooch.io/apps/600f2a17ea7d03000c058d41/conversations/d6b6f2bcb4a7ed8a71c98ce9/8NXQuloWEfh6n2ZcC6_1w-lz/rVDCLPH6T7SMwn8ncevU3wYU.jpeg', detail = 0)
 for resultado in resultados:
     print(resultado)
+
+
+"""
+
+import threading
+
+import easyocr
+
+LEITOR = easyocr.Reader(['pt'], gpu=True)
+
+
+def ocerizar(url):
+    global LEITOR
+    print(LEITOR.readtext(url, detail=0))
+    return 1
+
+
+if __name__ == '__main__':
+    vurl = "https://raw.githubusercontent.com/JaidedAI/EasyOCR/master/examples/example.png"
+    for i in range(1, 29):
+        threading.Thread(target=ocerizar, kwargs={'url': vurl}, daemon=False).start()
+
+"""

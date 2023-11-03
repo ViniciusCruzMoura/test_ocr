@@ -75,3 +75,42 @@ if __name__ == '__main__':
             print("GPU THREAD - ", i)
             threading.Thread(target=ocerizar, kwargs={'url': vurl}, daemon=False).start()
 """
+
+"""
+import threading
+import easyocr
+
+LEITOR_GPU = easyocr.Reader(['pt'], gpu=True)
+LEITOR_CPU = easyocr.Reader(['pt'], gpu=True)
+
+def get_gpu_memory():
+    import subprocess as sp
+    import os
+    command = "nvidia-smi --query-gpu=memory.free --format=csv"
+    memory_free_info = sp.check_output(command.split()).decode('ascii').split('\n')[:-1][1:]
+    memory_free_values = [int(x.split()[0]) for i, x in enumerate(memory_free_info)]
+    return memory_free_values[0]
+
+def ocerizar(url):
+    global LEITOR_GPU
+    global LEITOR_CPU
+    print("VRAM: ", get_gpu_memory())
+    if threading.active_count() != -1:
+        return 0
+    if get_gpu_memory() < 2000 or (threading.active_count() >= 5 and threading.active_count() <= 20):
+        #print("CPU_OCR - ", LEITOR_CPU.readtext(url, detail=0))
+        #return LEITOR_CPU.readtext(url, detail=0)
+        print("CPU_OCR")
+    elif threading.active_count() < 5:
+        #print("GPU_OCR - ", LEITOR_GPU.readtext(url, detail=0))
+        #return LEITOR_GPU.readtext(url, detail=0)
+        print("GPU_OCR")
+    return 1
+
+if __name__ == '__main__':
+    #vurl = "https://raw.githubusercontent.com/JaidedAI/EasyOCR/master/examples/example.png"
+    vurl = "https://media.smooch.io/apps/600f2a17ea7d03000c058d41/conversations/d6b6f2bcb4a7ed8a71c98ce9/8NXQuloWEfh6n2ZcC6_1w-lz/rVDCLPH6T7SMwn8ncevU3wYU.jpeg"
+    #print(ocerizar(vurl))
+    for i in range(1, 100):
+        threading.Thread(target=ocerizar, kwargs={'url': vurl}, daemon=False).start()
+"""
